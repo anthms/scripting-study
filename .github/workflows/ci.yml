@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  bash-tests:
+    name: Bash Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Bash version
+        run: bash --version
+
+      - name: Run Bash scripts (smoke test)
+        run: |
+          bash bash/basics/variables.sh
+          bash bash/basics/loops.sh
+          bash bash/basics/functions.sh
+          bash bash/devops/file_operations.sh
+          bash bash/devops/environment_check.sh
+
+      - name: Run Bash test suite
+        run: bash bash/tests/run_tests.sh
+
+  python-tests:
+    name: Python Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r python/requirements.txt
+
+      - name: Run Python scripts (smoke test)
+        run: |
+          python python/basics/variables.py
+          python python/basics/loops.py
+          python python/basics/functions.py
+          python python/devops/file_operations.py
+          python python/devops/environment_check.py
+
+      - name: Run pytest
+        working-directory: python
+        run: pytest tests/ -v --tb=short
