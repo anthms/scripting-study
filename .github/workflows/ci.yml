@@ -10,6 +10,8 @@ jobs:
   bash-tests:
     name: Bash Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +32,8 @@ jobs:
   python-tests:
     name: Python Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
